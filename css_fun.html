@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CSS Fun</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@keyframes myanim {
+0%   { background:#29f; left:0; }
+100%  { background:#f29; left:200px; }
+}
+
+@-webkit-keyframes myanim {
+0%   { background:#29f; left:0; }
+100%  { background:#f29; left:200px; }
+}
+
+#mybox {
+width:100px; height:100px; position:relative;
+background:#29f;
+
+animation:myanim 2s;
+-webkit-animation:myanim 2s;
+
+/* FASTER: animation:myanim 1s;  -webkit-animation:myanim 1s; */
+/* SLOWER: animation:myanim 4s;  -webkit-animation:myanim 4s; */
+
+/* EASING: animation:myanim 2s linear; */
+/* SLOW->FAST: animation:myanim 2s ease-in; */
+/* FAST->SLOW: animation:myanim 2s ease-out; */
+/* SLOW->FAST->SLOW: animation:myanim 2s ease-in-out; */
+
+/* START DELAY: animation:myanim 2s linear 2s; */
+/* 3 ITERATIONS: animation:myanim 2s ease-in-out 2s 3 alternate; */
+/* INFINITE LOOP: animation:myanim 2s ease-in-out 2s infinite alternate; */
+}
+
+#mybtn {
+width:160px;
+height:60px;
+background:#29f;
+border:4px solid #149;
+border-radius:8px;
+color:#eee;
+font-size:20px;
+font-weight:bold;
+
+transition:background 1s;
+/* BROWSER PREFIX: -webkit-transition:background 1s; */
+
+/* FASTER: transition:background 200ms; */
+/* SAME as 200ms: transition:background .2s; */
+/* SLOWER: transition:background 3s; */
+
+/* EASING: transition:background 3s linear; */
+/* EASING: transition:background 3s ease-in-out; */
+
+/* START DELAY: transition:background 1s linear 1s; */
+}
+#mybtn:hover {
+background:#f29;
+}
+
+#myrnd {
+display:block;
+width:60px;
+height:60px;
+line-height:60px;
+position:relative;
+background:#29f;
+border:4px solid #149;
+border-radius:50%;
+color:#eee;
+text-align:center;
+text-decoration:none;
+font-size:20px;
+font-weight:bold;
+
+transition: all 1s;
+/* transition:background 1s, border-color 1s, color 1s, border-radius 1s; */
+}
+#myrnd:hover {
+background:#f29;
+border-color:#914;
+color:#fff;
+border-radius:8px;
+}
+</style>
+</head>
+<body>
+<h1>CSS3 Animations + Transitions</h1>
+<div>
+<p>Animate a div...</p>
+<div id="mybox"></div>
+</div>
+<div>
+<p>Animate a button...</p>
+<button id="mybtn">LOGIN</button>
+</div>
+<div>
+<p>Animate a link...</p>
+<p><a href="http://example.com" id="myrnd">GO!</a></p>
+</div>
+</body>
+</html>
