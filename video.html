@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Video</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.vid { background:#f29; padding:8px; text-align:center; }
+</style>
+</head>
+<body>
+<h1>Video</h1>
+
+<div>
+<p>Video player...</p>
+<div class="vid">
+<!-- http://www.bigbuckbunny.org/ -->
+<video id="vid" width="480" height="270" controls>
+<source src="http://download.blender.org/peach/trailer/trailer_iphone.m4v" type="video/mp4" />
+<source src="http://download.blender.org/peach/trailer/trailer_400p.ogg" type="video/ogg" />
+</video>
+<p><button id="playbtn" onclick="playpause()">PLAY</button></p>
+</div>
+</div>
+
+<script>
+function playpause() {
+    var vid = document.getElementById('vid');
+    if (vid.paused) {
+        vid.play();
+        document.getElementById('playbtn').innerHTML = 'PAUSE';
+    } else {
+        vid.pause();
+        document.getElementById('playbtn').innerHTML = 'PLAY';
+    } 
+}
+</script>
+
+<!-- ****************************************************** -->
+
+<div>
+<p>Webcam video...</p>
+<div class="vid" style="background:#29f;"> 
+<video id="cam" width="480" height="360" controls>
+</video>
+<p><button id="startbtn" onclick="startcam()">START</button></p>
+</div>
+</div>
+
+<script>
+function startcam() {
+    var vid = document.getElementById('cam');
+    navigator.getUserMedia = (navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia);
+    
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia( { video:true, audio:false },        
+            function(stream) {
+                var url = window.URL || window.webkitURL;
+                vid.src = url ? url.createObjectURL(stream) : stream;
+                vid.play();
+                document.getElementById('startbtn').style.display = 'none';
+            },
+            function(error) {
+                //if you get permission denied in Chrome, you MUST launch
+                //with --allow-file-access-from-files flag
+                alert('doh! webcam error. err=' + error.name);
+            }
+        );
+    } else {
+        alert('getUserMedia not supported');
+    }
+}
+</script>
+
+</body>
+</html>
