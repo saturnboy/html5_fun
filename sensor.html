@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sensor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { background-color:#f29; }
+#cnv {
+  width:500px; height:500px;
+  top:50%; left:50%; position:absolute;
+  margin:-250px 0 0 -250px;
+}
+</style>
+</head>
+<body>
+<h1>Device Orientation</h1>
+<canvas id="cnv"></canvas>
+
+<script>
+var ang = 0;
+init();
+
+function init() {
+    if (!window.DeviceOrientationEvent) {
+        alert('doh! device orientation not supported');
+        return;
+    }
+    
+	// evt.alpha = compass direction (north is 0)
+	// evt.beta = front-to-back tilt (frontwards is positive)
+	// evt.gamma = left-to-right tilt (right is positive)
+    window.addEventListener('deviceorientation',
+        function(evt) {
+            ang = lowpass(evt.gamma, ang);
+        });
+        
+    var cnv = document.getElementById('cnv');
+ 
+    //canvas supported?
+    if (!cnv.getContext) {
+        alert('doh! canvas not supported');
+        return;
+    }
+  
+    //init canvas
+    cnv.width = 500;
+    cnv.height = 500;
+   
+    //start update loop
+    tick();
+}
+
+function tick() {
+	//clear canvas
+	var cnv = document.getElementById('cnv');
+	var ctx = cnv.getContext('2d');
+	ctx.clearRect(0, 0, 500, 500);
+
+	//re-draw  
+	draw(ctx, ang);
+  
+    //call tick again after 31ms (aka ~32fps)
+	setTimeout(tick, 31);
+}
+
+function draw(ctx, ang) {
+    //draw blue circ
+	ctx.beginPath();
+	ctx.arc(250, 250, 250, 0, 2 * Math.PI);
+	ctx.fillStyle = '#29f';
+	ctx.fill();
+	ctx.closePath();
+	
+	//rotate context
+	ctx.save();
+	ctx.translate(250,250);
+	ctx.rotate(ang == undefined ? 0 : -ang * Math.PI / 180.0);
+	
+	//draw white bar
+	ctx.beginPath();
+	ctx.rect(-245, -5, 490, 10);
+	ctx.fillStyle = '#fff';
+	ctx.fill();
+	ctx.closePath();
+
+	//draw text
+	ctx.font = '64pt Georgia';
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	ctx.fillStyle = '#444';
+	ctx.fillText('ROTATE ME', 0, 0);
+	
+	//restore rotation
+	ctx.restore();
+}
+
+function lowpass(newval,oldval) {
+    // low-pass filter: only use 20% of the new value
+    return (0.2 * newval + 0.8 * oldval);
+}
+</script>
+</body>
+</html>
