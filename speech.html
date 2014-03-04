@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Speech</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+pre { border:1px solid #333; padding:8px; width:500px; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Video</h1>
+
+<div>
+<p>Speech recognition...</p>
+<p><button id="inputbtn" onclick="speechin()">START</button></p>
+<pre id="speechout">output goes here...</pre>
+</div>
+
+<script>
+var recognition = null;
+var recognizing = false;
+var colors = {
+    aqua:'#00FFFF', black:'#000000', blue:'#0000FF',
+    fuchsia:'#FF00FF', gray:'#808080', green:'#008000',
+    lime:'#00FF00', maroon:'#800000', navy:'#000080',
+    olive:'#808000', orange:'#FFA500', purple:'#800080',
+    red:'#FF0000', silver:'#C0C0C0', teal:'#008080',
+    white:'#FFFFFF', yellow:'#FFFF00'
+};
+
+function speechin() {
+    //check for speech
+    if (!window.webkitSpeechRecognition) {
+        alert('doh! speech not supported');
+        return;
+    }
+    
+    //stop listening
+    if (recognizing) {
+        recognition.stop();
+        document.getElementById('inputbtn').innerHTML = 'START';
+        return;
+    }
+    
+    //start listening
+    recognizing = true;
+    document.getElementById('inputbtn').innerHTML = 'STOP';
+    speechfinal = '';
+    
+    recognition = new webkitSpeechRecognition();
+    recognition.language = 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = function() {
+        recognizing = true;
+        document.getElementById('speechout').innerHTML = '';
+    };
+
+    recognition.onerror = function(event) {
+        alert('doh! speech error. err=' + event.error);
+    };
+
+    recognition.onend = function() {
+        recognizing = false;
+    };
+
+    recognition.onresult = function(event) {
+        var tmp = '';
+        for (var i = 0; i < event.results.length; ++i) {
+            var isFinal = event.results[i].isFinal;
+            var val = event.results[i][0].transcript;
+            
+            //speech out
+            tmp += (isFinal ? '<b>' + val + '</b>' : val);
+            
+            //color commands
+            var parts = val.toLowerCase().split(' ');
+            for (var j = parts.length - 1; j >= 0; j--) {
+                var word = parts[j];
+                if (word.length > 0 && colors.hasOwnProperty(word)) {
+                    console.log('color=' + word);
+                    document.body.style.background = colors[word];
+                    break;
+                }
+            }
+        }
+        document.getElementById('speechout').innerHTML = tmp;
+    };
+    
+    //start
+    recognition.start();
+}
+</script>
+
+</body>
+</html>
