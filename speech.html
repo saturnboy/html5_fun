@@ -9,7 +9,7 @@ pre { border:1px solid #333; padding:8px; width:500px; white-space:pre-wrap; }
 </style>
 </head>
 <body>
-<h1>Video</h1>
+<h1>Speech</h1>
 
 <div>
 <p>Speech recognition...</p>
@@ -46,7 +46,6 @@ function speechin() {
     //start listening
     recognizing = true;
     document.getElementById('inputbtn').innerHTML = 'STOP';
-    speechfinal = '';
     
     recognition = new webkitSpeechRecognition();
     recognition.language = 'en-US';
