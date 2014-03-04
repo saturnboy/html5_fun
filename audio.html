@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Audio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { outline:none; }
+#output { padding-left:16px; }
+</style>
+</head>
+<body>
+<h1>Audio</h1>
+
+<div>
+<p>Audio player...</p>
+<!-- http://www.freesound.org/people/cheeseymofodude/sounds/158587/ -->
+<audio src="media/piano.mp3" controls loop />
+</div>
+
+<!-- ****************************************************** -->
+
+<div>
+<p>Ask user for microphone permission...</p>
+<p><button onclick="ask()">MIC PERMISSION</button></p>
+</div>
+
+<script>
+function ask() {
+    navigator.getUserMedia = (navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia);
+    
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia( { audio:true },        
+            function(stream) {
+                alert('thanks! microphone access successful');
+            },
+            function(error) {
+                //if you get permission denied in Chrome, you MUST launch
+                //with --allow-file-access-from-files flag
+                alert('doh! mic error. err=' + error.name);
+            }
+        );
+    } else {
+        alert('getUserMedia not supported');
+    }
+}
+</script>
+
+</body>
+</html>
